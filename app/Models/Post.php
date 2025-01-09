@@ -12,6 +12,23 @@ class Post extends Model
     // Definiowanie relacji wielu do wielu z modelu Tag
     public function tags()
     {
-        return $this->belongsToMany(Tag::class);
+        return $this->belongsToMany(Tag::class, 'post_tag', 'post_id', 'tag_id');
     }
+    public function user()
+{
+    return $this->belongsTo(User::class);
+}
+public function comments()
+{
+    return $this->hasMany(Comment::class);
+}
+
+public function votes()
+{
+    return $this->hasMany(Vote::class);
+}
+public function category()
+{
+    return $this->belongsTo(Category::class);
+}
 }

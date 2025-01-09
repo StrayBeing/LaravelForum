@@ -10,9 +10,9 @@ return new class extends Migration
     {
         Schema::create('votes', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('post_id')->constrained()->cascadeOnDelete();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
-            $table->tinyInteger('vote'); // 1 = upvote, -1 = downvote
+            $table->foreignId('post_id')->constrained()->cascadeOnDelete();
+            $table->integer('vote'); // Może to być +1 lub -1
             $table->timestamps();
         });
     }

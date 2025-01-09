@@ -13,12 +13,13 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call([
+            CategoriesTableSeeder::class,
             UsersTableSeeder::class,
             PostsTableSeeder::class,
             TagsTableSeeder::class,
             PostTagTableSeeder::class,
-            CategoriesTableSeeder::class,
             CommentsTableSeeder::class,
+            VotesTableSeeder::class,
         ]);
     }
 }
