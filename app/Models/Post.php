@@ -31,4 +31,8 @@ public function category()
 {
     return $this->belongsTo(Category::class);
 }
+public function getTotalVotesAttribute()
+{
+    return $this->votes()->sum('vote'); // Sum of all votes (1 for upvotes, -1 for downvotes)
+}
 }

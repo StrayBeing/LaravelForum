@@ -47,5 +47,9 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+    public function hasVotedOnPost($postId)
+{
+    return $this->votes()->where('post_id', $postId)->exists();
+}
 }
 

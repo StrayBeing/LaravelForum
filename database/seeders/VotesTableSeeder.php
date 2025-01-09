@@ -6,15 +6,30 @@ use Illuminate\Database\Seeder;
 use App\Models\Vote;
 use App\Models\Post;
 use App\Models\User;
+use Faker\Factory as Faker;
 
 class VotesTableSeeder extends Seeder
 {
     public function run()
     {
-        // Tworzenie 200 głosów
-        Vote::factory()->count(200)->create([
-            'post_id' => Post::all()->random()->id, // Przypisujemy istniejący post
-            'user_id' => User::all()->random()->id, // Przypisujemy istniejącego użytkownika
-        ]);
+        // Instantiate Faker
+        $faker = Faker::create();
+
+        // Loop through each post and assign a unique vote for each user
+        $posts = Post::all();
+        $users = User::all();
+
+        // For each post, create a unique vote for each user
+        foreach ($posts as $post) {
+            foreach ($users as $user) {
+                // Ensure each user only votes once on a post
+                Vote::create([
+                    'post_id' => $post->id,
+                    'user_id' => $user->id,
+                    'vote' => $faker->randomElement([1, -1]),
+                ]);
+            }
+        }
     }
 }
+

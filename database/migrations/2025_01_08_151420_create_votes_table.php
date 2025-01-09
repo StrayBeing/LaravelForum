@@ -12,8 +12,11 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->foreignId('post_id')->constrained()->cascadeOnDelete();
-            $table->integer('vote'); // Może to być +1 lub -1
+            $table->integer('vote'); // Can be +1 or -1
             $table->timestamps();
+    
+            // Add unique constraint to prevent multiple votes per user on the same post
+            $table->unique(['user_id', 'post_id']);
         });
     }
 

@@ -11,19 +11,31 @@
             <span>{{ $tag->name }}</span>
         @endforeach
     </div>
+
     <div>
-        <form method="POST" action="{{ route('forum.vote', $post) }}">
+        <form method="POST" action="{{ route('vote', ['postId' => $post->id]) }}">
             @csrf
-            <button name="vote" value="1">Upvote</button>
-            <button name="vote" value="-1">Downvote</button>
+            <!-- Display current vote status -->
+            @if(auth()->user()->hasVotedOnPost($post->id))
+                <p>You have voted on this post.</p>
+            @else
+                <button name="vote" value="1">Upvote</button>
+                <button name="vote" value="-1">Downvote</button>
+            @endif
         </form>
     </div>
+
+    <div>
+        <p>Total Votes: {{ $post->totalVotes }}</p>
+    </div>
+
     <h3>Comments</h3>
     <form method="POST" action="{{ route('forum.comment', $post) }}">
         @csrf
         <textarea name="content"></textarea>
         <button type="submit">Comment</button>
     </form>
+
     <ul>
         @foreach($post->comments as $comment)
             <li>

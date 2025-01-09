@@ -33,4 +33,5 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/forum/{post}/vote', [ForumController::class, 'vote'])->name('forum.vote');
     Route::post('/forum/{post}/comment', [ForumController::class, 'comment'])->name('forum.comment');
     Route::get('/profile/{user}', [ProfileController::class, 'show'])->name('profile.show');
+    Route::post('/post/{postId}/vote', [VoteController::class, 'vote'])->name('vote');
 });

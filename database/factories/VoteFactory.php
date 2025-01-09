@@ -13,8 +13,11 @@ class VoteFactory extends Factory
     public function definition(): array
     {
         return [
-            'post_id' => Post::factory(),
-            'user_id' => User::factory(),
+            // Use an existing post from the database
+            'post_id' => Post::all()->random()->id,
+            // Use an existing user from the database
+            'user_id' => User::all()->random()->id,
+            // Randomly assign upvote or downvote
             'vote' => $this->faker->randomElement([1, -1]),
         ];
     }
