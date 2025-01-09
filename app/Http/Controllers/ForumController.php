@@ -27,13 +27,29 @@ class ForumController extends Controller
     }
     public function show($id)
     {
-        $post = Post::find($id); // Fetch the post by ID
-
+        // Fetch the post along with related comments and their authors
+        $post = Post::with(['comments.user', 'tags', 'user'])->find($id);
+    
         if (!$post) {
-            return abort(404, 'Post not found'); // Handle case where post doesn't exist
+            return abort(404, 'Post not found');
         }
-
-        return view('forum.show', compact('post')); // Return the view with the post data
+    
+        return view('forum.show', compact('post')); // Pass the post to the view
     }
     
+    public function addComment(Request $request, Post $post)
+{
+    $request->validate([
+        'content' => 'required|string|max:5000',
+    ]);
+
+    $post->comments()->create([
+        'user_id' => auth()->id(),
+        'content' => $request->input('content'),
+    ]);
+
+    return redirect()->route('forum.show', $post)->with('success', 'Comment added successfully.');
+}
+
+
 }

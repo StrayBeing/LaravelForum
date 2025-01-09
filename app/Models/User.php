@@ -48,8 +48,12 @@ class User extends Authenticatable
         ];
     }
     public function hasVotedOnPost($postId)
+    {
+        return $this->votes()->where('post_id', $postId)->exists();
+    }
+public function votes()
 {
-    return $this->votes()->where('post_id', $postId)->exists();
+    return $this->hasMany(Vote::class);
 }
 }
 

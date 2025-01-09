@@ -71,6 +71,20 @@ button {
 button:hover {
     background-color: #45a049;
 }
+.btn-success {
+    background-color: #28a745;
+    color: white;
+}
+
+.btn-danger {
+    background-color: #dc3545;
+    color: white;
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+    color: white;
+}
 
 .logout-form {
     display: inline;

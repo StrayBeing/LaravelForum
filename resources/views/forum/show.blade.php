@@ -13,28 +13,43 @@
     </div>
 
     <div>
-        <form method="POST" action="{{ route('vote', ['postId' => $post->id]) }}">
-            @csrf
-            <!-- Display current vote status -->
-            @if(auth()->user()->hasVotedOnPost($post->id))
-                <p>You have voted on this post.</p>
-            @else
-                <button name="vote" value="1">Upvote</button>
-                <button name="vote" value="-1">Downvote</button>
-            @endif
-        </form>
-    </div>
+    <form method="POST" action="{{ route('vote', ['postId' => $post->id]) }}">
+        @csrf
+        <!-- Highlight the upvote or downvote button based on the user's vote -->
+        @php
+            $userVote = auth()->user()->votes()->where('post_id', $post->id)->first();
+            $upvoted = $userVote && $userVote->vote === 1;
+            $downvoted = $userVote && $userVote->vote === -1;
+        @endphp
+
+        <button 
+            name="vote" 
+            value="1" 
+            class="btn {{ $upvoted ? 'btn-success' : 'btn-secondary' }}">
+            Upvote
+        </button>
+
+        <button 
+            name="vote" 
+            value="-1" 
+            class="btn {{ $downvoted ? 'btn-danger' : 'btn-secondary' }}">
+            Downvote
+        </button>
+    </form>
+</div>
+
 
     <div>
         <p>Total Votes: {{ $post->totalVotes }}</p>
     </div>
 
     <h3>Comments</h3>
-    <form method="POST" action="{{ route('forum.comment', $post) }}">
-        @csrf
-        <textarea name="content"></textarea>
-        <button type="submit">Comment</button>
-    </form>
+<form method="POST" action="{{ route('forum.comment', $post) }}">
+    @csrf
+    <textarea name="content" rows="4" class="form-control" placeholder="Write your comment..."></textarea>
+    <button type="submit" class="btn btn-primary mt-2">Comment</button>
+</form>
+
 
     <ul>
         @foreach($post->comments as $comment)

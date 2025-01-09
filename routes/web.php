@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ForumController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\VoteController;
 // Strony logowania i rejestracji
 Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register');
 Route::post('/register', [AuthController::class, 'register']);
@@ -31,7 +32,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/forum', [ForumController::class, 'index'])->name('forum.index');
     Route::get('/forum/{post}', [ForumController::class, 'show'])->name('forum.show');
     Route::post('/forum/{post}/vote', [ForumController::class, 'vote'])->name('forum.vote');
-    Route::post('/forum/{post}/comment', [ForumController::class, 'comment'])->name('forum.comment');
+    Route::post('/forum/{post}/comment', [ForumController::class, 'addComment'])->name('forum.comment');
     Route::get('/profile/{user}', [ProfileController::class, 'show'])->name('profile.show');
     Route::post('/post/{postId}/vote', [VoteController::class, 'vote'])->name('vote');
 });
