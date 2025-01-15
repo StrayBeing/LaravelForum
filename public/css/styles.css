@@ -26,7 +26,7 @@ body {
 }
 
 .navbar a {
-    color: white;
+    color: rgb(0, 0, 0);
     text-decoration: none;
     margin: 0 10px;
     font-weight: bold;
@@ -52,7 +52,10 @@ form {
     margin-bottom: 20px;
 }
 
-input, select, textarea, button {
+input,
+select,
+textarea,
+button {
     width: 100%;
     padding: 10px;
     margin: 10px 0;
@@ -71,6 +74,7 @@ button {
 button:hover {
     background-color: #45a049;
 }
+
 .btn-success {
     background-color: #28a745;
     color: white;
@@ -100,7 +104,8 @@ button:hover {
 }
 
 /* Nagłówki */
-h1, h3 {
+h1,
+h3 {
     color: #333;
     margin-bottom: 20px;
 }
@@ -188,7 +193,10 @@ span {
         margin: 5px 0;
     }
 
-    input, select, textarea, button {
+    input,
+    select,
+    textarea,
+    button {
         font-size: 14px;
     }
 }

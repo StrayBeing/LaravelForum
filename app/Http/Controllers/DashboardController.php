@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Auth;
+use App\Models\User; // Import the User model
 
 class DashboardController extends Controller
 {
@@ -12,7 +13,8 @@ class DashboardController extends Controller
 
         switch ($role) {
             case 'admin':
-                return view('dashboards.admin');
+                $users = User::all(); // Fetch all users for admin
+                return view('dashboards.admin', compact('users'));
             case 'moderator':
                 return view('dashboards.moderator');
             default:

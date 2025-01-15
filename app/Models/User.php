@@ -22,7 +22,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'role',  // Domyślna rola
+        'role',
+        'ban_status',  // Domyślna rola
     ];
 
     /**

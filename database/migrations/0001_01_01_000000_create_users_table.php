@@ -18,6 +18,8 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->string('role')->default('user'); // Domyślna wartość: 'user'
+            $table->boolean('ban_status')->default(1);
+            $table->timestamp('ban_until')->nullable(); // Nowa kolumna do daty zakończenia banowania
             $table->rememberToken();
             $table->timestamps();
         });

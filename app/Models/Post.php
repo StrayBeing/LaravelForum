@@ -8,7 +8,13 @@ use Illuminate\Database\Eloquent\Model;
 class Post extends Model
 {
     use HasFactory;
-
+    protected $fillable = [
+        'title',
+        'content',
+        'user_id',
+        'category_id', // Add this if it's missing
+    ];
+    
     // Definiowanie relacji wielu do wielu z modelu Tag
     public function tags()
     {
