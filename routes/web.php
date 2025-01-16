@@ -34,7 +34,9 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::post('/create-user', [AdminDashboardController::class, 'createUser'])->name('createUser');
     Route::post('/ban-user/{id}', [AdminDashboardController::class, 'banUser'])->name('banUser');
     Route::post('/unban-user/{id}', [AdminDashboardController::class, 'unbanUser'])->name('unbanUser');
-    Route::delete('/delete-user/{id}', [AdminDashboardController::class, 'deleteUser'])->name('deleteUser'); // <-- Use DELETE here
+    Route::delete('/delete-user/{id}', [AdminDashboardController::class, 'deleteUser'])->name('deleteUser'); 
+    Route::get('/users/{user}/edit', [AdminDashboardController::class, 'editUser'])->name('editUser');
+    Route::put('/users/{user}', [AdminDashboardController::class, 'updateUser'])->name('updateUser');
     
 });
 

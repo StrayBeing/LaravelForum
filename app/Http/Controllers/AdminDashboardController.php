@@ -61,4 +61,30 @@ class AdminDashboardController extends Controller
 
         return redirect()->route('admin.dashboard')->with('success', 'User has been deleted.');
     }
+    public function editUser(User $user)
+{
+    return view('admin.editUser', compact('user'));
+}
+public function updateUser(Request $request, User $user)
+{
+    $validated = $request->validate([
+        'name' => 'required|string|max:255',
+        'email' => 'required|email|max:255|unique:users,email,' . $user->id,
+        'role' => 'required|in:admin,moderator,user',
+        'password' => 'nullable|min:8|confirmed', // Opcjonalne pole hasła
+    ]);
+
+    $user->name = $validated['name'];
+    $user->email = $validated['email'];
+    $user->role = $validated['role'];
+
+    if (!empty($validated['password'])) {
+        $user->password = bcrypt($validated['password']); // Hashowanie hasła
+    }
+
+    $user->save();
+
+    return redirect()->route('admin.dashboard')->with('success', 'User updated successfully.');
+}
+
 }
