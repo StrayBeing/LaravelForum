@@ -4,136 +4,277 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Forum')</title>
+    <script>
+    // Sprawdzamy, czy użytkownik ma zapisane preferencje w localStorage
+    let savedDarkMode = localStorage.getItem('dark-mode');
 
+    // Jeśli użytkownik ma ustawiony tryb ciemny, dodajemy klasę 'dark-mode' do body
+    if (savedDarkMode === 'enabled') {
+        document.body.classList.add('dark-mode');
+    }
+
+    // Dodajemy klasę 'loading' do body, aby ukryć stronę podczas ładowania
+    document.body.classList.add('loading');
+</script>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Custom Styles -->
     <style>
-        /* Default Styles */
+        body.loading {
+    visibility: hidden;
+}
         body {
             font-size: 16px;
             background-color: #f8f9fa;
             color: #212529;
-            transition: background-color 0.3s, color 0.3s, border-color 0.3s; /* Added smooth transition for theme change */
+            transition: background-color 0.3s, color 0.3s;
         }
 
-        .large-font { font-size: 18px; }
-        .extra-large-font { font-size: 20px; }
-        .extra-large-font-2 { font-size: 22px; }
+        body.dark-mode .list-group-item {
+            background-color: #495057;
+            color: #f8f9fa;
+        }
 
-        /* Dark Mode Styles */
+        body.dark-mode .list-group-item a {
+            color: #d1d1d1;
+        }
+
+        body.dark-mode .list-group-item a:hover {
+            color: #a8a8a8;
+        }
+
+        body.dark-mode .list-group-item textarea {
+            background-color: #495057;
+            color: #f8f9fa;
+            border-color: #6c757d;
+        }
+
+        body.dark-mode .card {
+            background-color: #343a40;
+            color: #f8f9fa;
+        }
+
+        body.dark-mode .card-header {
+            background-color: #495057;
+            color: #f8f9fa;
+        }
+
+        body.dark-mode .table {
+            background-color: #343a40;
+            color: #f8f9fa;
+        }
+
+        body.dark-mode .table th, body.dark-mode .table td {
+            border-color: #6c757d;
+        }
+
+        body.dark-mode .table th {
+            background-color: #495057;
+            color: #f8f9fa;
+        }
+
+        body.dark-mode .table-hover tbody tr:hover {
+            background-color: #495057;
+        }
+
+        body.dark-mode .btn-primary, body.dark-mode .btn-success, body.dark-mode .btn-danger, body.dark-mode .btn-warning {
+            background-color: #007bff;
+        }
+
+        body.dark-mode .btn-primary:hover, body.dark-mode .btn-success:hover, body.dark-mode .btn-danger:hover, body.dark-mode .btn-warning:hover {
+            background-color: #0056b3;
+        }
+
+        body.dark-mode .pagination .page-item .page-link {
+            background-color: #495057;
+            color: #f8f9fa;
+        }
+
+        body.dark-mode .pagination .page-item.active .page-link {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+        body.dark-mode .pagination .page-item .page-link:hover {
+            background-color: #6c757d;
+        }
+
+        .accessibility-menu {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            z-index: 1000;
+            background-color: #ffffff;
+            border: 1px solid #dee2e6;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            width: 60px;
+            text-align: center;
+            transition: all 0.3s ease-in-out;
+        }
+
+        body.dark-mode .list-group-item {
+            background-color: #495057;
+            color: #f8f9fa;
+        }
+
+        body.dark-mode .list-group-item a {
+            color: #007bff;
+        }
+
+        body.dark-mode .list-group-item a:hover {
+            color: #0056b3;
+        }
+
+        body.dark-mode .list-group-item textarea {
+            background-color: #495057;
+            color: #f8f9fa;
+            border-color: #6c757d;
+        }
+
+        .accessibility-menu button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        body.dark-mode .navbar .nav-link {
+            color: #f8f9fa;
+        }
+
+        body.dark-mode .navbar .nav-link:hover {
+            color: #007bff;
+        }
+
+        .accessibility-menu button:hover {
+            background-color: #0056b3;
+            transform: scale(1.1);
+        }
+
+        .accessibility-menu button:focus {
+            outline: 2px solid #ffcc00;
+        }
+
+        .accessibility-menu .close-btn {
+            background-color: #dc3545;
+        }
+
+        .accessibility-menu .close-btn:hover {
+            background-color: #a71d2a;
+        }
+
+        .large-font {
+            font-size: 18px;
+        }
+
+        .extra-large-font {
+            font-size: 20px;
+        }
+
+        .extra-large-font-2 {
+            font-size: 22px;
+        }
+
         body.dark-mode {
             background-color: #343a40;
             color: #f8f9fa;
         }
 
-        /* Dark Mode for navbar */
         body.dark-mode .navbar {
-            background-color: #495057;
+            background-color: #495057 !important;
+        }
+
+        body.dark-mode .navbar a {
             color: #f8f9fa;
         }
 
-        body.dark-mode .navbar-nav .nav-link {
-            color: #f8f9fa;
-        }
-
-        body.dark-mode .navbar-nav .nav-link:hover {
+        body.dark-mode .navbar a:hover {
             color: #007bff;
         }
 
-        /* Dark Mode for buttons */
+        body.dark-mode .footer {
+            background-color: #495057 !important;
+            color: #f8f9fa;
+        }
+
+        body.dark-mode .footer a {
+            color: #f8f9fa;
+        }
+
+        body.dark-mode .footer a:hover {
+            color: #007bff;
+        }
+
+        body.dark-mode input,
+        body.dark-mode textarea,
+        body.dark-mode select,
+        body.dark-mode button {
+            background-color: #495057;
+            color: #f8f9fa;
+            border: 1px solid #6c757d;
+        }
+
+        body.dark-mode input:focus,
+        body.dark-mode textarea:focus,
+        body.dark-mode select:focus {
+            border-color: #007bff;
+        }
+
         body.dark-mode .btn {
             background-color: #007bff;
-            color: #ffffff;
+            color: white;
         }
 
         body.dark-mode .btn:hover {
             background-color: #0056b3;
         }
 
-        /* Dark Mode for form elements */
-        body.dark-mode input, body.dark-mode textarea, body.dark-mode select {
-            background-color: #495057;
-            color: #f8f9fa;
-            border-color: #6c757d;
-        }
-
-        /* Dark Mode for links */
         body.dark-mode a {
-            color: #f8f9fa;
-        }
-
-        body.dark-mode a:hover {
             color: #007bff;
         }
 
-        /* Dark Mode for footer */
-        body.dark-mode .footer {
-            background-color: #495057;
+        body.dark-mode a:hover {
+            color: #0056b3;
+        }
+
+        body.dark-mode h5,
+        body.dark-mode .card-header {
             color: #f8f9fa;
         }
 
-        /* Dark Mode Styles for Accessibility Controls */
-        body.dark-mode .accessibility-controls {
+        body.dark-mode .form-control,
+        body.dark-mode .form-select {
             background-color: #495057;
+            color: #f8f9fa;
+            border: 1px solid #6c757d;
+        }
+
+        body.dark-mode ul {
             color: #f8f9fa;
         }
 
-        /* Accessibility Controls */
-        .accessibility-controls {
-            position: fixed;
-            top: 10px;
-            right: 10px;
-            z-index: 1000;
-            background-color: #fff;
-            padding: 10px;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            max-width: 60px;
-            text-align: center;
-            transition: all 0.3s ease-in-out;
-        }
-
-        .accessibility-controls button {
-            margin: 5px;
-            padding: 12px 15px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 50%;
-            font-size: 20px;
-            cursor: pointer;
-            width: 50px;
-            height: 50px;
-        }
-
-        .accessibility-controls button:hover {
-            background-color: #0056b3;
-        }
-
-        .accessibility-controls button:focus {
-            outline: 2px solid #ffcc00; /* Adds a yellow outline on focus for accessibility */
-        }
-
-        .accessibility-controls .close-btn {
-            font-size: 24px;
-            background-color: red;
-            border-radius: 50%;
-            padding: 5px;
-        }
-
-        /* Responsive for smaller screens */
         @media (max-width: 768px) {
-            .accessibility-controls {
-                position: fixed;
+            .accessibility-menu {
                 top: 5px;
                 right: 5px;
-                z-index: 9999;
+                width: 50px;
+                gap: 8px;
             }
 
-            /* Adjust navbar font size on smaller screens */
-            .navbar {
+            .accessibility-menu button {
+                width: 35px;
+                height: 35px;
                 font-size: 16px;
             }
         }
@@ -141,8 +282,8 @@
 </head>
 
 <body>
-    <!-- Accessibility Controls -->
-    <div class="accessibility-controls" id="accessibility-controls">
+    <!-- Accessibility Menu -->
+    <div class="accessibility-menu" id="accessibility-controls">
         <button id="increase-font" aria-label="Increase font size">A+</button>
         <button id="decrease-font" aria-label="Decrease font size">A-</button>
         <button id="toggle-dark-mode" aria-label="Toggle dark mode">🌙</button>
@@ -206,66 +347,70 @@
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     
-    <!-- jQuery (required for Bootstrap's JavaScript plugins) -->
+    <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <!-- Custom JavaScript -->
     <script>
-        $(document).ready(function() {
-            // Check localStorage for saved preferences
-            let fontSize = localStorage.getItem('font-size');
-            if (fontSize === 'large') {
-                $('body').addClass('large-font');
-            } else if (fontSize === 'extra-large') {
-                $('body').addClass('extra-large-font');
-            } else if (fontSize === 'extra-large-2') {
-                $('body').addClass('extra-large-font-2');
-            }
+       $(document).ready(function() {
+    // Usuń klasę loading po załadowaniu preferencji
+    $('body').removeClass('loading');
 
-            let darkMode = localStorage.getItem('dark-mode');
-            if (darkMode === 'enabled') {
-                $('body').addClass('dark-mode');
-            }
+    // Sprawdzamy, czy użytkownik ma zapisane preferencje w localStorage
+    let savedDarkMode = localStorage.getItem('dark-mode');
+    let savedFontSize = localStorage.getItem('font-size');
+    
+    // Zastosuj zapisane preferencje czcionki
+    if (savedFontSize) {
+        $('body').addClass(savedFontSize);
+    }
 
-            // Increase Font Size
-            $('#increase-font').click(function() {
-                let currentFontSize = localStorage.getItem('font-size');
-                if (currentFontSize === 'large') {
-                    $('body').removeClass('large-font').addClass('extra-large-font');
-                    localStorage.setItem('font-size', 'extra-large');
-                } else if (currentFontSize === 'extra-large') {
-                    $('body').removeClass('extra-large-font').addClass('extra-large-font-2');
-                    localStorage.setItem('font-size', 'extra-large-2');
-                }
-            });
+    // Zastosuj preferencje dark mode
+    if (savedDarkMode === 'enabled') {
+        $('body').addClass('dark-mode');
+    } else if (savedDarkMode === 'disabled') {
+        $('body').removeClass('dark-mode');
+    }
 
-            // Decrease Font Size
-            $('#decrease-font').click(function() {
-                let currentFontSize = localStorage.getItem('font-size');
-                if (currentFontSize === 'extra-large-2') {
-                    $('body').removeClass('extra-large-font-2').addClass('extra-large-font');
-                    localStorage.setItem('font-size', 'extra-large');
-                } else if (currentFontSize === 'extra-large') {
-                    $('body').removeClass('extra-large-font').addClass('large-font');
-                    localStorage.setItem('font-size', 'large');
-                }
-            });
+    // Zwiększanie czcionki
+    $('#increase-font').click(function() {
+        let currentFontSize = localStorage.getItem('font-size');
+        if (currentFontSize === 'large') {
+            $('body').removeClass('large-font').addClass('extra-large-font');
+            localStorage.setItem('font-size', 'extra-large');
+        } else if (currentFontSize === 'extra-large') {
+            $('body').removeClass('extra-large-font').addClass('extra-large-font-2');
+            localStorage.setItem('font-size', 'extra-large-2');
+        }
+    });
 
-            // Toggle Dark Mode
-            $('#toggle-dark-mode').click(function() {
-                $('body').toggleClass('dark-mode');
-                if ($('body').hasClass('dark-mode')) {
-                    localStorage.setItem('dark-mode', 'enabled');
-                } else {
-                    localStorage.setItem('dark-mode', 'disabled');
-                }
-            });
+    // Zmniejszanie czcionki
+    $('#decrease-font').click(function() {
+        let currentFontSize = localStorage.getItem('font-size');
+        if (currentFontSize === 'extra-large-2') {
+            $('body').removeClass('extra-large-font-2').addClass('extra-large-font');
+            localStorage.setItem('font-size', 'extra-large');
+        } else if (currentFontSize === 'extra-large') {
+            $('body').removeClass('extra-large-font').addClass('large-font');
+            localStorage.setItem('font-size', 'large');
+        }
+    });
 
-            // Toggle Accessibility Controls visibility
-            $('#toggle-accessibility').click(function() {
-                $('#accessibility-controls').toggleClass('d-none');
-            });
-        });
+    // Przełączanie Dark Mode
+    $('#toggle-dark-mode').click(function() {
+        $('body').toggleClass('dark-mode');
+        if ($('body').hasClass('dark-mode')) {
+            localStorage.setItem('dark-mode', 'enabled');
+        } else {
+            localStorage.setItem('dark-mode', 'disabled');
+        }
+    });
+
+    // Toggle Accessibility Menu
+    $('#toggle-accessibility').click(function() {
+        $('#accessibility-controls').toggle();
+    });
+});
     </script>
 </body>
 </html>
