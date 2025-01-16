@@ -6,9 +6,12 @@ use App\Models\Category;
 use App\Models\Post;
 use App\Models\Tag;
 use Illuminate\Http\Request;
+use App\Policies\CommentPolicy;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class ForumController extends Controller
 {
+    use AuthorizesRequests;
     public function index(Request $request)
 {
     $search = $request->query('search');
@@ -57,12 +60,51 @@ class ForumController extends Controller
         $request->validate([
             'content' => 'required|string|max:5000',
         ]);
-
+    
         $post->comments()->create([
             'user_id' => auth()->id(),
             'content' => $request->input('content'),
+            'created_at' => now(),
         ]);
-
+    
         return redirect()->route('forum.show', $post)->with('success', 'Comment added successfully.');
     }
+    public function editComment(Request $request, Post $post, $commentId)
+{
+    $comment = $post->comments()->where('id', $commentId)->first();
+
+    if (!$comment) {
+        return abort(404, 'Comment not found.');
+    }
+
+    // Sprawdzenie uprawnień
+    $this->authorize('update', $comment);
+
+    $request->validate([
+        'content' => 'required|string|max:5000',
+    ]);
+
+    $comment->update([
+        'content' => $request->input('content'),
+        'edited_at' => now(),
+        'edited_by' => auth()->id(),
+    ]);
+
+    return redirect()->route('forum.show', $post)->with('success', 'Comment updated successfully.');
+}
+public function destroyComment(Post $post, $commentId)
+{
+    $comment = $post->comments()->where('id', $commentId)->first();
+
+    if (!$comment) {
+        return abort(404, 'Comment not found.');
+    }
+
+    // Sprawdzenie uprawnień
+    $this->authorize('delete', $comment);
+
+    $comment->delete();
+
+    return redirect()->route('forum.show', $post)->with('success', 'Comment deleted successfully.');
+}
 }

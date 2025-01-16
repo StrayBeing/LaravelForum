@@ -13,6 +13,8 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->foreignId('post_id')->constrained()->cascadeOnDelete();
             $table->text('content');
+            $table->timestamp('edited_at')->nullable(); // Data edycji
+            $table->foreignId('edited_by')->nullable()->constrained('users')->nullOnDelete(); // Kto edytował
             $table->timestamps();
         });
     }

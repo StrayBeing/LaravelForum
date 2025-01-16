@@ -56,5 +56,9 @@ public function votes()
 {
     return $this->hasMany(Vote::class);
 }
+public function hasRole(string $role): bool
+{
+    return $this->role === $role;
+}
 }
 

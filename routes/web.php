@@ -75,3 +75,5 @@ Route::middleware(['auth', 'role:moderator'])->prefix('moderator')->name('modera
 Route::middleware(['auth', 'role:user'])->prefix('user')->name('user.')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 });
+Route::put('/forum/{post}/comments/{commentId}', [ForumController::class, 'editComment'])->name('forum.editComment');
+Route::delete('/forum/{post}/comments/{commentId}', [ForumController::class, 'destroyComment'])->name('forum.destroyComment');

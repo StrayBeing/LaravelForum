@@ -68,11 +68,37 @@
 
 
     <ul>
-        @foreach($post->comments as $comment)
-            <li>
-                {{ $comment->content }} by <a href="{{ route('profile.show', $comment->user) }}">{{ $comment->user->name }}</a>
-            </li>
-        @endforeach
+    @foreach($post->comments as $comment)
+    <li>
+        {{ $comment->content }}
+        <br>
+        <small>
+            By <a href="{{ route('profile.show', $comment->user) }}">{{ $comment->user->name }}</a>
+            on {{ $comment->created_at->format('Y-m-d H:i') }}
+        </small>
+        @if($comment->edited_at)
+            <small>(edited at {{ \Carbon\Carbon::parse($comment->created_at)->format('Y-m-d H:i') }})</small>
+        @endif
+
+        @can('update', $comment)
+            <form method="POST" action="{{ route('forum.editComment', ['post' => $post->id, 'commentId' => $comment->id]) }}" class="mt-2">
+                @csrf
+                @method('PUT')
+                <textarea name="content" rows="2" class="form-control">{{ $comment->content }}</textarea>
+                <button type="submit" class="btn btn-primary mt-1">Update</button>
+            </form>
+        @endcan
+
+        @can('delete', $comment)
+            <form method="POST" action="{{ route('forum.destroyComment', ['post' => $post->id, 'commentId' => $comment->id]) }}" style="display:inline;">
+                @csrf
+                @method('DELETE')
+                <button type="submit" class="btn btn-danger">Delete</button>
+            </form>
+        @endcan
+    </li>
+    @endforeach
+
     </ul>
 </div>
 @endsection
