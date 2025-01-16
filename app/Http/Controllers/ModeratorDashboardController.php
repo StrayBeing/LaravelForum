@@ -10,8 +10,8 @@ class ModeratorDashboardController extends Controller
 {
     public function index()
     {
-        $users = User::where('role', '!=', 'admin')->get();  // Moderator can't see admins
-        return view('dashboards.moderator', compact('users'));
+        $users = User::where('role', '!=', 'admin')->paginate(10); // ✅ Dodaj paginację
+    return view('dashboards.moderator', compact('users'));
     }
 
     public function editUser(User $user)

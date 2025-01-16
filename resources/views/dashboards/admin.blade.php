@@ -8,9 +8,10 @@
     @if(session('success'))
         <div class="alert alert-success">{{ session('success') }}</div>
     @endif
+
     <div class="mb-3">
-    <a href="{{ route('admin.createUserForm') }}" class="btn btn-success">Create New User</a>
-</div>
+        <a href="{{ route('admin.createUserForm') }}" class="btn btn-success">Create New User</a>
+    </div>
 
     <table class="table">
         <thead>
@@ -36,7 +37,7 @@
                         @endif
                     </td>
                     <td>
-                    @if($user->ban_status == 1)
+                        @if($user->ban_status == 1)
                             <form action="{{ route('admin.banUser', $user->id) }}" method="POST" style="display: inline-block;">
                                 @csrf
                                 <label for="ban_until">Ban Until:</label>
@@ -51,22 +52,22 @@
                             </form>
                         @endif
 
-                        <!-- Form for setting ban duration -->
-
-
                         <!-- Form for deleting a user -->
                         <form action="{{ route('admin.deleteUser', $user->id) }}" method="POST" style="display: inline-block;">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="btn btn-danger">Delete</button>
                         </form>
-                        <td>
-    <a href="{{ route('admin.editUser', $user->id) }}" class="btn btn-primary">Edit</a>
-</td>
+                        <a href="{{ route('admin.editUser', $user->id) }}" class="btn btn-primary">Edit</a>
                     </td>
                 </tr>
             @endforeach
         </tbody>
     </table>
+
+    <!-- Pagination -->
+    <<div class="pagination">
+    {{ $users->links() }} <!-- This renders the pagination links -->
+</div>
 </div>
 @endsection

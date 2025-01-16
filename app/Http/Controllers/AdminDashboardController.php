@@ -9,8 +9,8 @@ class AdminDashboardController extends Controller
 {
     public function index()
     {
-        $users = User::all();  // Admin sees all users
-    return view('dashboards.admin', compact('users'));
+        $users = User::paginate(10);
+        return view('dashboards.admin', compact('users'));
     }
 
     // Show the form to ban a user (GET)

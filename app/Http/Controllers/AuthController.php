@@ -78,7 +78,7 @@ class AuthController extends Controller
                 case 'moderator':
                     return redirect()->route('moderator.dashboard');  // Redirect to Moderator Controller
                 default:
-                    return redirect()->route('dashboard');  // Redirect to User Dashboard
+                    return redirect()->route('user.dashboard');  // Redirect to User Dashboard
             }
         // If login fails
         return back()->withErrors(['email' => 'Invalid credentials.'])->withInput();

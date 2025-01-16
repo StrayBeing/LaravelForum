@@ -43,17 +43,22 @@ class ForumController extends Controller
 }
 
 
-    public function show($id)
-    {
-        // Pobranie posta z komentarzami, tagami i autorem
-        $post = Post::with(['comments.user', 'tags', 'user', 'category'])->find($id);
+public function show($id)
+{
+    // Pobranie posta z komentarzami (z paginacją), tagami i autorem
+    $post = Post::with(['comments.user', 'tags', 'user', 'category'])
+                ->find($id);
 
-        if (!$post) {
-            return abort(404, 'Post not found');
-        }
-
-        return view('forum.show', compact('post'));
+    if (!$post) {
+        return abort(404, 'Post not found');
     }
+
+    // Pobierz komentarze z paginacją
+    $comments = $post->comments()->paginate(10);
+
+    return view('forum.show', compact('post', 'comments'));
+}
+
 
     public function addComment(Request $request, Post $post)
     {
