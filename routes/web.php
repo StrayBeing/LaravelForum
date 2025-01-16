@@ -48,5 +48,11 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/forum/{post}/comment', [ForumController::class, 'addComment'])->name('forum.comment');
     Route::get('/profile/{user}', [ProfileController::class, 'show'])->name('profile.show');
     Route::post('/post/{postId}/vote', [VoteController::class, 'vote'])->name('vote');
+     // Edycja postu
+     Route::get('/forum/{post}/edit', [PostController::class, 'edit'])->name('forum.edit');
+     Route::put('/forum/{post}', [PostController::class, 'update'])->name('forum.update');
+ 
+     // Usuwanie postu
+     Route::delete('/forum/{post}', [PostController::class, 'destroy'])->name('forum.destroy');
 });
 

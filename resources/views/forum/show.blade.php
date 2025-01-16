@@ -2,6 +2,22 @@
 
 @section('content')
 <div class="container">
+@if(Auth::check() && (Auth::user()->can('update', $post) || Auth::user()->can('delete', $post)))
+    <div class="mt-3">
+        @can('update', $post)
+            <a href="{{ route('forum.edit', $post) }}" class="btn btn-primary">Edit</a>
+        @endcan
+
+        @can('delete', $post)
+            <form method="POST" action="{{ route('forum.destroy', $post) }}" style="display:inline;">
+                @csrf
+                @method('DELETE')
+                <button type="submit" class="btn btn-danger">Delete</button>
+            </form>
+        @endcan
+    </div>
+@endif
+
     <h1>{{ $post->title }}</h1>
     <p>By <a href="{{ route('profile.show', $post->user) }}">{{ $post->user->name }}</a></p>
     <p>{{ $post->content }}</p>
