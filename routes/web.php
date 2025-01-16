@@ -9,7 +9,8 @@ use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Middleware\RoleMiddleware;
 use App\Http\Controllers\PostController;
-// Home Route
+// Home Route 
+use App\Http\Controllers\ModeratorDashboardController;
 Route::get('/', function () {
     return view('welcome');
 })->name('welcome');
@@ -28,7 +29,7 @@ Route::get('/dashboard', [DashboardController::class, 'index'])
     ->middleware('auth')
     ->name('dashboard');
 
-// Admin Routes
+// Admin Routesa
 Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
     Route::post('/create-user', [AdminDashboardController::class, 'createUser'])->name('createUser');
@@ -37,6 +38,8 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::delete('/delete-user/{id}', [AdminDashboardController::class, 'deleteUser'])->name('deleteUser'); 
     Route::get('/users/{user}/edit', [AdminDashboardController::class, 'editUser'])->name('editUser');
     Route::put('/users/{user}', [AdminDashboardController::class, 'updateUser'])->name('updateUser');
+    Route::get('/create-user', [AdminDashboardController::class, 'createUserForm'])->name('createUserForm');
+    Route::post('/users', [AdminDashboardController::class, 'storeUser'])->name('storeUser');
     
 });
 
@@ -58,3 +61,17 @@ Route::middleware(['auth'])->group(function () {
      Route::delete('/forum/{post}', [PostController::class, 'destroy'])->name('forum.destroy');
 });
 
+// Moderator Routes
+Route::middleware(['auth', 'role:moderator'])->prefix('moderator')->name('moderator.')->group(function () {
+    Route::get('/dashboard', [ModeratorDashboardController::class, 'index'])->name('dashboard');
+    Route::get('/users/{user}/edit', [ModeratorDashboardController::class, 'editUser'])->name('editUser');
+    Route::put('/users/{user}', [ModeratorDashboardController::class, 'updateUser'])->name('updateUser');
+    Route::get('/users/{user}/edit', [ModeratorDashboardController::class, 'editUser'])->name('editUser');
+    Route::put('/users/{user}', [ModeratorDashboardController::class, 'updateUser'])->name('updateUser');
+    // Moderators can ban/unban users but cannot delete or create them
+    Route::post('/ban-user/{id}', [ModeratorDashboardController::class, 'banUser'])->name('banUser');
+    Route::post('/unban-user/{id}', [ModeratorDashboardController::class, 'unbanUser'])->name('unbanUser');
+});
+Route::middleware(['auth', 'role:user'])->prefix('user')->name('user.')->group(function () {
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+});

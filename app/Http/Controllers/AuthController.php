@@ -50,34 +50,40 @@ class AuthController extends Controller
 
     // Handle login
     public function login(Request $request)
-{
-    // Validate input fields
-    $request->validate([
-        'email' => 'required|email',
-        'password' => 'required',
-    ]);
-
-    // Attempt to login user
-    $user = User::where('email', $request->email)->first();
-
-    // Check if user exists and if they are banned
-    if ($user && $user->ban_status == 0) {
-        // Check if the ban is still active
-        if ($user->ban_until && Carbon::now()->lt(Carbon::parse($user->ban_until))) {
-            // If the ban is still active, deny login and return a message
-            return back()->withErrors(['email' => 'Your account is banned until ' . Carbon::parse($user->ban_until)->toDateString() . '.'])->withInput();
+    {
+        // Validate input fields
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required',
+        ]);
+    
+        // Attempt to login user
+        $user = User::where('email', $request->email)->first();
+    
+        // Check if user exists and if they are banned
+        if ($user && $user->ban_status == 0) {
+            if ($user->ban_until && Carbon::now()->lt(Carbon::parse($user->ban_until))) {
+                return back()->withErrors(['email' => 'Your account is banned until ' . Carbon::parse($user->ban_until)->toDateString() . '.'])->withInput();
+            }
         }
+    
+        // Attempt login if user is not banned or the ban has expired
+        if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
+            $user = Auth::user();
+    
+            // Redirect based on role
+            switch ($user->role) {
+                case 'admin':
+                    return redirect()->route('admin.dashboard');  // Redirect to Admin Controller
+                case 'moderator':
+                    return redirect()->route('moderator.dashboard');  // Redirect to Moderator Controller
+                default:
+                    return redirect()->route('dashboard');  // Redirect to User Dashboard
+            }
+        // If login fails
+        return back()->withErrors(['email' => 'Invalid credentials.'])->withInput();
     }
-
-    // Attempt login if user is not banned or the ban has expired
-    if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
-        return redirect()->route('dashboard')->with('success', 'Logged in successfully.');
-    }
-
-    // If login fails
-    return back()->withErrors(['email' => 'Invalid credentials.'])->withInput();
 }
-
     // Handle logout
     public function logout()
     {

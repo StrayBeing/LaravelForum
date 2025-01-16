@@ -9,10 +9,8 @@ class AdminDashboardController extends Controller
 {
     public function index()
     {
-        // Get all users for the admin dashboard
-        $users = User::all(); 
-
-        return view('dashboards.admin', compact('users'));
+        $users = User::all();  // Admin sees all users
+    return view('dashboards.admin', compact('users'));
     }
 
     // Show the form to ban a user (GET)
@@ -85,6 +83,28 @@ public function updateUser(Request $request, User $user)
     $user->save();
 
     return redirect()->route('admin.dashboard')->with('success', 'User updated successfully.');
+}
+public function createUserForm()
+{
+    return view('admin.createUser');
+}
+public function storeUser(Request $request)
+{
+    $validated = $request->validate([
+        'name' => 'required|string|max:255',
+        'email' => 'required|email|max:255|unique:users',
+        'role' => 'required|in:admin,moderator,user',
+        'password' => 'required|min:8|confirmed',
+    ]);
+
+    User::create([
+        'name' => $validated['name'],
+        'email' => $validated['email'],
+        'role' => $validated['role'],
+        'password' => bcrypt($validated['password']), // Hashowanie hasła
+    ]);
+
+    return redirect()->route('admin.dashboard')->with('success', 'User created successfully.');
 }
 
 }

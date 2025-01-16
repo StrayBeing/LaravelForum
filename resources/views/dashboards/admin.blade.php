@@ -8,6 +8,9 @@
     @if(session('success'))
         <div class="alert alert-success">{{ session('success') }}</div>
     @endif
+    <div class="mb-3">
+    <a href="{{ route('admin.createUserForm') }}" class="btn btn-success">Create New User</a>
+</div>
 
     <table class="table">
         <thead>
@@ -33,11 +36,12 @@
                         @endif
                     </td>
                     <td>
-                        @if($user->ban_status == 1)
-                            <!-- Form for banning the user -->
+                    @if($user->ban_status == 1)
                             <form action="{{ route('admin.banUser', $user->id) }}" method="POST" style="display: inline-block;">
                                 @csrf
-                                <button type="submit" class="btn btn-warning">Ban</button>
+                                <label for="ban_until">Ban Until:</label>
+                                <input type="date" name="ban_until" required>
+                                <button type="submit" class="btn btn-warning">Set Ban</button>
                             </form>
                         @else
                             <!-- Form for unbanning the user -->
@@ -48,14 +52,7 @@
                         @endif
 
                         <!-- Form for setting ban duration -->
-                        @if($user->ban_status == 1)
-                            <form action="{{ route('admin.banUser', $user->id) }}" method="POST" style="display: inline-block;">
-                                @csrf
-                                <label for="ban_until">Ban Until:</label>
-                                <input type="date" name="ban_until" required>
-                                <button type="submit" class="btn btn-warning">Set Ban</button>
-                            </form>
-                        @endif
+
 
                         <!-- Form for deleting a user -->
                         <form action="{{ route('admin.deleteUser', $user->id) }}" method="POST" style="display: inline-block;">
